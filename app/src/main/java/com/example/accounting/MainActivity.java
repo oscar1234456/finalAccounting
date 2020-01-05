@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity{
     private void initView() {
         pageList = new ArrayList<>();
 
-        myCostView = new myCostView(MainActivity.this)
+        myCostView = new myCostView(MainActivity.this);
         // Add the view items to pageList
         pageList.add(myCostView);
 
