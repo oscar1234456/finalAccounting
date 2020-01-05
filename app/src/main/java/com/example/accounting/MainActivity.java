@@ -1,7 +1,10 @@
 package com.example.accounting;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,18 +18,24 @@ import com.example.accounting.mainView.PageView;
 import com.example.accounting.mainView.myCostView;
 import com.example.accounting.mainView.myInvoiceView;
 import com.example.accounting.mainView.settingView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
+    public static final int LOGIN_SUCCESS = 200;
     private ViewPager mViewPager;
     private ArrayList<PageView> pageList;
     private TabLayout mTablayout;
     public myInvoiceView myInvoiceView;
+    public myCostView myCostView;
+    public settingView mySettingView;
     private SamplePagerAdapter pagerAdapter;
+    private Member userData;
+
 
 
     /**
@@ -38,9 +47,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String loginCode;
 
-        initView(); //Initialize View
-        initTab(); //Initialize TabLayout and viewPager
+
+        SharedPreferences myPref = getPreferences(MODE_PRIVATE);
+        loginCode = myPref.getString("LoginStatus","FALSE");
+        if(loginCode.equals("FALSE")){   //尚未有登入資料
+            Intent it = new Intent(this,LoginMenu.class);
+            startActivityForResult(it,100);
+            Log.e("main","FALSE");
+        }else{
+            View view = this.findViewById(R.id.snack);
+            String userName = myPref.getString("userName","Guest");
+            String userEmail = myPref.getString("userEmail","null");
+            String userPhoto = myPref.getString("userPhoto","null");
+            userData = new Member(userName,userEmail,userPhoto);
+            Snackbar.make(view,"成功！"+userName+" "+userEmail+" "+userPhoto,Snackbar.LENGTH_LONG).show();
+            initView(); //Initialize View
+            initTab(); //Initialize TabLayout and viewPager
+        }
     }
 
 
@@ -48,7 +73,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        myInvoiceView.addData();
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
+
+
 
     }
 
@@ -82,16 +119,19 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         pageList = new ArrayList<>();
 
+        myCostView = new myCostView(MainActivity.this)
         // Add the view items to pageList
-        pageList.add(new myCostView(MainActivity.this));
+        pageList.add(myCostView);
 
         // Use a attribute to save myInvoiceView
         myInvoiceView = new myInvoiceView(MainActivity.this);
         // Add the view items to pageList
         pageList.add(myInvoiceView);
 
+
+        mySettingView = new settingView(MainActivity.this);
         // Add the view items to pageList
-        pageList.add(new settingView(MainActivity.this));
+        pageList.add(mySettingView);
 
     }
 
@@ -133,6 +173,36 @@ public class MainActivity extends AppCompatActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
             //System.out.println("OUT");  :for test use
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent it){
+        super.onActivityResult(requestCode, resultCode, it);
+        if (requestCode != RESULT_CANCELED) {
+            if(resultCode == LOGIN_SUCCESS && it != null){
+                Member user;
+                Log.e("mainProcess","LOGINSUECESS");
+
+                user =  (Member) it.getSerializableExtra("user");
+                View view = this.findViewById(R.id.snack);
+
+                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+
+                editor.putString("LoginStatus","TRUE");
+                editor.putString("userName",user.showName());
+                editor.putString("userEmail",user.showemail());
+                editor.putString("userPhoto",user.showPhoto());
+                editor.commit();
+
+                //Snackbar.make(view,"成功！",Snackbar.LENGTH_LONG).show();
+
+                initView(); //Initialize View
+                initTab(); //Initialize TabLayout and viewPager
+                Snackbar.make(view,user.showName()+" "+user.showemail()+" "+user.showPhoto(),Snackbar.LENGTH_LONG).show();
+            }else{
+
+            }
         }
     }
 

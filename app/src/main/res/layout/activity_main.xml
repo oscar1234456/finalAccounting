@@ -49,5 +49,10 @@
         app:backgroundTint="#F7B881"
         app:srcCompat="@drawable/addicon" />
 
+    <View
+        android:id="@+id/snack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

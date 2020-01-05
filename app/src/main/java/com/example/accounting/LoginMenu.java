@@ -28,12 +28,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 public class LoginMenu extends AppCompatActivity implements View.OnClickListener{
 
 
+    public static final String LOGIN = "LoginProcess";
     public CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
 
@@ -42,14 +44,17 @@ public class LoginMenu extends AppCompatActivity implements View.OnClickListener
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     GoogleSignInOptions gso;
+
+    Intent it;
     final static int RC_SIGN_IN = 200;
+    public static final int LOGIN_SUCCESS = 200;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_menu);
-
+        it = getIntent();
         /*Set Google signin button*/
         singButton = this.findViewById(R.id.sign_in_button); //google singin button
         singButton.setSize(SignInButton.SIZE_WIDE);
@@ -70,9 +75,6 @@ public class LoginMenu extends AppCompatActivity implements View.OnClickListener
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        View view = this.findViewById(R.id.snack);
-        Snackbar.make(view,R.string.notice,Snackbar.LENGTH_LONG).show();
-
     }
 
 
@@ -256,9 +258,20 @@ public class LoginMenu extends AppCompatActivity implements View.OnClickListener
             String email = user.getEmail();
             Uri photoUrl = user.getPhotoUrl();
 
-            /*txv1.setText(name);
-            txv2.setText(email);
-            txv3.setText(photoUrl.toString()); */ // for test use
+            Log.e(LOGIN,"Get email"+email);
+
+            Member tempuser = new Member(name,email,photoUrl);
+            Log.e(LOGIN,tempuser.showName());
+            Log.e(LOGIN,tempuser.showemail());
+            Log.e(LOGIN,tempuser.showPhoto());
+            it.putExtra("user",tempuser);
+            setResult(LOGIN_SUCCESS,it);
+            Log.e(LOGIN,"toFiNNISH");
+            finish();
+
+        }else{
+            View view = this.findViewById(R.id.snack);
+            Snackbar.make(view,R.string.notice,Snackbar.LENGTH_LONG).show();
         }
     }
 
