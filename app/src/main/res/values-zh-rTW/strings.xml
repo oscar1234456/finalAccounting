@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">記帳軟體</string>
+    <string name="myCost_tabItem">我的花費</string>
+    <string name="myInvoice_tabItem">我的發票</string>
+    <string name="setting_tabItem">設定</string>
+    <string name="notice">生成！</string>
+</resources>

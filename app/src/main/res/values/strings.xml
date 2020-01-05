@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">accounting</string>
+    <string name="myCost_tabItem">MyCost</string>
+    <string name="myInvoice_tabItem">MyInvoice</string>
+    <string name="setting_tabItem">Setting</string>
+    <string-array name="menuitems">
+        <item>hambuger</item>
+        <item>noode</item>
+        <item>rice</item>
+
+    </string-array>
+
+    <string name="notice">Born!</string>
+</resources>

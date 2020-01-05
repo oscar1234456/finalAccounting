@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/imgbtn1"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:background="@drawable/background"
+            android:scaleType="fitCenter" />
+
+        <!--            <ImageButton-->
+        <!--                android:id="@+id/imgbtn2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="120dp"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:background="@drawable/background"-->
+        <!--                android:scaleType="fitCenter" />-->
+
+        <!--            <ImageButton-->
+        <!--                android:id="@+id/imgbtn3"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="120dp"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:background="@drawable/background"-->
+        <!--                android:scaleType="fitCenter" />-->
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/txv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            android:textSize="14sp" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/txv2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="150dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="TextView"-->
+<!--            android:textSize="14sp" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/txv3"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="290dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="TextView"-->
+<!--            android:textSize="14sp" />-->
+
+</RelativeLayout>
