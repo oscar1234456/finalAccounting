@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.accounting.Member;
 import com.example.accounting.R;
 
 
@@ -14,6 +15,8 @@ import com.example.accounting.R;
  * used to state the setting page in the tabLayout
  */
 public class settingView extends PageView {
+
+    private Member user;
 
     /**
      * Constructor for settingView
@@ -36,5 +39,9 @@ public class settingView extends PageView {
     @Override
     public void refreshView() {
 
+    }
+
+    public void getUserData(Member tempUser){
+        user = tempUser;
     }
 }
