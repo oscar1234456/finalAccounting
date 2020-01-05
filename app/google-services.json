@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1047501738362",
+    "firebase_url": "https://finalaccounting.firebaseio.com",
+    "project_id": "finalaccounting",
+    "storage_bucket": "finalaccounting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047501738362:android:d882e3686bb03b328bc6c3",
+        "android_client_info": {
+          "package_name": "com.example.accounting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047501738362-6dgf28dj77592c6vtflc63c7dsu909u4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.accounting",
+            "certificate_hash": "09225f746c0b6f51e98b4ada68e25ae7c536e227"
+          }
+        },
+        {
+          "client_id": "1047501738362-ua771regcm241pdldu2rutulmo7duimv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABSbR3iebQv1yAVDQVWb13SVnEWZmP0P8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047501738362-ua771regcm241pdldu2rutulmo7duimv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">記帳軟體</string>
-    <string name="myCost_tabItem">我的花費</string>
-    <string name="myInvoice_tabItem">我的發票</string>
-    <string name="setting_tabItem">設定</string>
-    <string name="notice">生成！</string>
+    <string name="app_name">雲記帳</string>
+
+    <string name="welcome">歡迎!</string>
+
+    <string name="myCost_tabItem">情報</string>
+    <string name="myInvoice_tabItem">每日</string>
+    <string name="setting_tabItem">個人</string>
+    <string name="notice">請先登入！</string>
+    <string name="facebook_app_id">1194618894068662</string> <string name="fb_login_protocol_scheme">fb1194618894068662</string>
 </resources>

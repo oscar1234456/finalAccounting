@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">accounting</string>
-    <string name="myCost_tabItem">MyCost</string>
-    <string name="myInvoice_tabItem">MyInvoice</string>
-    <string name="setting_tabItem">Setting</string>
+    <string name="app_name">CloudAccounting</string>
+
+    <string name="welcome">welcome!</string>
+
+    <string name="myCost_tabItem">Information</string>
+    <string name="myInvoice_tabItem">Day</string>
+    <string name="setting_tabItem">Me</string>
     <string-array name="menuitems">
         <item>hambuger</item>
         <item>noode</item>
@@ -11,4 +14,5 @@
     </string-array>
 
     <string name="notice">Born!</string>
+    <string name="facebook_app_id">1194618894068662</string> <string name="fb_login_protocol_scheme">fb1194618894068662</string>
 </resources>
