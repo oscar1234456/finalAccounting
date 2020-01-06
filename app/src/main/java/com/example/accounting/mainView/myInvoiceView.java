@@ -44,6 +44,7 @@ public class myInvoiceView extends PageView {
         //test used
         data = new ArrayList<>();
 
+        addData();
         //the Adapter for recyclerView
         invoiceAdapter = new recycleViewAdapter(context, data);
 

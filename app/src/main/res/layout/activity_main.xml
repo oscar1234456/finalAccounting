@@ -17,6 +17,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
@@ -39,7 +40,7 @@
     </androidx.viewpager.widget.ViewPager>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +48,44 @@
         android:layout_marginTop="670dp"
         android:clickable="true"
         app:backgroundTint="#F7B881"
-        app:srcCompat="@drawable/addicon" />
+        app:srcCompat="@drawable/addicon" />-->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        app:fab_addButtonColorNormal="#F7B881"
+        app:fab_addButtonColorPressed="@color/white_pressed"
+        app:fab_addButtonPlusIconColor="#FFEB3B"
+        app:fab_labelStyle="@style/TabLayoutTextStyle"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        app:srcCompat="@drawable/addicon">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/expenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_star"
+            app:fab_colorNormal="#F44336"
+            app:fab_colorPressed="@color/white_pressed"
+            app:fab_size="mini"
+            app:fab_title="支出" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#4CAF50"
+            app:fab_colorPressed="@color/white_pressed"
+            app:fab_size="mini"
+            app:fab_title="收入" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <View
         android:id="@+id/snack"

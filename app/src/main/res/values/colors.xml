@@ -11,4 +11,6 @@
     <color name="gray">#A5A5A5</color>
     <color name="black">#000000</color>
     <color name="colorAmount">#D6D6D6</color>
+    <color name="white_pressed">#D6D6D6</color>
+    <color name="half_black">#ADFAFAFA</color>
 </resources>

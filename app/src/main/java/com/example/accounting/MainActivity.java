@@ -18,13 +18,15 @@ import com.example.accounting.mainView.PageView;
 import com.example.accounting.mainView.myCostView;
 import com.example.accounting.mainView.myInvoiceView;
 import com.example.accounting.mainView.settingView;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final int LOGIN_SUCCESS = 200;
     private ViewPager mViewPager;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity{
     public settingView mySettingView;
     private SamplePagerAdapter pagerAdapter;
     private Member userData;
+
+    FloatingActionButton mfab1,mfab2;
 
 
 
@@ -65,6 +69,11 @@ public class MainActivity extends AppCompatActivity{
             Snackbar.make(view,"成功！"+userName+" "+userEmail+" "+userPhoto,Snackbar.LENGTH_LONG).show();
             initView(); //Initialize View
             initTab(); //Initialize TabLayout and viewPager
+            mfab1 = this.findViewById(R.id.expenses);
+            mfab2 = this.findViewById(R.id.income);
+
+            mfab1.setOnClickListener(this);
+            mfab2.setOnClickListener(this);
         }
     }
 
@@ -133,6 +142,9 @@ public class MainActivity extends AppCompatActivity{
         // Add the view items to pageList
         pageList.add(mySettingView);
 
+        FloatingActionsMenu buttonBw = this.findViewById(R.id.multiple_actions);
+
+
     }
 
     /**
@@ -143,6 +155,21 @@ public class MainActivity extends AppCompatActivity{
     private void initListener() {
         mTablayout.addOnTabSelectedListener(new tabClickListener(mViewPager));
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
+    }
+
+    @Override
+    public void onClick(View v) {
+        View view = this.findViewById(R.id.snack);
+        switch(v.getId()){
+            case R.id.expenses:
+                Snackbar.make(view,"Expense！",Snackbar.LENGTH_LONG).show();
+                break;
+            case R.id.income:
+                Snackbar.make(view,"Income!",Snackbar.LENGTH_LONG).show();
+                Intent it = new Intent(this,newIncome.class);
+                startActivityForResult(it,300);
+                break;
+        }
     }
 
 
@@ -200,8 +227,14 @@ public class MainActivity extends AppCompatActivity{
                 initView(); //Initialize View
                 initTab(); //Initialize TabLayout and viewPager
                 Snackbar.make(view,user.showName()+" "+user.showemail()+" "+user.showPhoto(),Snackbar.LENGTH_LONG).show();
-            }else{
+            }else if(resultCode == 400 && it != null){
+                View view = this.findViewById(R.id.snack);
+                String amount = it.getStringExtra("amount");
+                String stringclass = it.getStringExtra("class");
+                String sdate = it.getStringExtra("date");
+                String text  = it.getStringExtra("text");
 
+                Snackbar.make(view,amount+" "+stringclass+" "+sdate+" "+text,Snackbar.LENGTH_LONG).show();
             }
         }
     }
