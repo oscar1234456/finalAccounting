@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 
+import com.example.accounting.dataStructure.incomeStruc;
 import com.example.accounting.listener.tabClickListener;
 import com.example.accounting.mainView.PageView;
 import com.example.accounting.mainView.myCostView;
@@ -20,15 +22,23 @@ import com.example.accounting.mainView.myInvoiceView;
 import com.example.accounting.mainView.settingView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final int LOGIN_SUCCESS = 200;
+    public static final String INCOMEADD_TAG = "INCOMEADD";
     private ViewPager mViewPager;
     private ArrayList<PageView> pageList;
     private TabLayout mTablayout;
@@ -37,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public settingView mySettingView;
     private SamplePagerAdapter pagerAdapter;
     private Member userData;
+    private DocumentReference mDocRef;
+    private CollectionReference mColRef;
 
     FloatingActionButton mfab1,mfab2;
 
@@ -66,14 +78,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String userEmail = myPref.getString("userEmail","null");
             String userPhoto = myPref.getString("userPhoto","null");
             userData = new Member(userName,userEmail,userPhoto);
-            Snackbar.make(view,"成功！"+userName+" "+userEmail+" "+userPhoto,Snackbar.LENGTH_LONG).show();
-            initView(); //Initialize View
-            initTab(); //Initialize TabLayout and viewPager
-            mfab1 = this.findViewById(R.id.expenses);
-            mfab2 = this.findViewById(R.id.income);
+            Snackbar.make(view,"成功登入！"+userName+" "+userEmail+" "+userPhoto,Snackbar.LENGTH_LONG).show();
 
-            mfab1.setOnClickListener(this);
-            mfab2.setOnClickListener(this);
+            init(userEmail);
         }
     }
 
@@ -94,6 +101,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
+
+    }
+
+    protected void init(String mail) {
+
+        initView(); //Initialize View
+        initTab(); //Initialize TabLayout and viewPager
+        mfab1 = this.findViewById(R.id.expenses);
+        mfab2 = this.findViewById(R.id.income);
+
+        mfab1.setOnClickListener(this);
+        mfab2.setOnClickListener(this);
+
+        mDocRef = FirebaseFirestore.getInstance().document("Users/"+mail);
+        mColRef = FirebaseFirestore.getInstance().collection("Users/"+mail+"/IE");
 
 
     }
@@ -163,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(v.getId()){
             case R.id.expenses:
                 Snackbar.make(view,"Expense！",Snackbar.LENGTH_LONG).show();
+
                 break;
             case R.id.income:
                 Snackbar.make(view,"Income!",Snackbar.LENGTH_LONG).show();
@@ -224,10 +248,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //Snackbar.make(view,"成功！",Snackbar.LENGTH_LONG).show();
 
-                initView(); //Initialize View
-                initTab(); //Initialize TabLayout and viewPager
+               init(user.email);
                 Snackbar.make(view,user.showName()+" "+user.showemail()+" "+user.showPhoto(),Snackbar.LENGTH_LONG).show();
             }else if(resultCode == 400 && it != null){
+
+                //當新增收入頁面回來時
                 View view = this.findViewById(R.id.snack);
                 String amount = it.getStringExtra("amount");
                 String stringclass = it.getStringExtra("class");
@@ -235,6 +260,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String text  = it.getStringExtra("text");
 
                 Snackbar.make(view,amount+" "+stringclass+" "+sdate+" "+text,Snackbar.LENGTH_LONG).show();
+                incomeStruc dataToSave = new incomeStruc(amount,stringclass,sdate,text);
+
+                //製造路線
+                mColRef.document("Income").collection(dataToSave.getIncomeDate()).add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
             }
         }
     }
