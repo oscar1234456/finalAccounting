@@ -1,5 +1,6 @@
 package com.example.accounting;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +34,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FloatingActionButton mfab1,mfab2;
 
-
+public void refre(){
+    onStart();
+}
 
     /**
      * Needed for Android System
@@ -112,8 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mfab1 = this.findViewById(R.id.expenses);
         mfab2 = this.findViewById(R.id.income);
 
+
         mfab1.setOnClickListener(this);
         mfab2.setOnClickListener(this);
+
 
         mDocRef = FirebaseFirestore.getInstance().document("Users/"+mail);
         mColRef = FirebaseFirestore.getInstance().collection("Users/"+mail+"/IE");
@@ -193,8 +201,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent it = new Intent(this,newIncome.class);
                 startActivityForResult(it,300);
                 break;
+
+
         }
     }
+
+
 
 
     private class SamplePagerAdapter extends PagerAdapter {
@@ -278,5 +290,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
+
+
+    /**
+     *
+     * 每日畫面相關方法
+     *
+     * */
+
+
 
 }

@@ -4,10 +4,10 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 public class incomeStruc {
-    private String incomeAmount;
-    private String incomeClass;
-    private String incomeDate;
-    private String incomeText;
+    public String incomeAmount;
+    public String incomeClass;
+    public String incomeDate;
+    public String incomeText;
 
     @ServerTimestamp
     private Timestamp incomeTimestamp;

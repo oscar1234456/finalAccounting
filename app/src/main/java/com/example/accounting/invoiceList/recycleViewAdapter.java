@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accounting.R;
+import com.example.accounting.dataStructure.incomeStruc;
 
 import java.util.ArrayList;
 
@@ -17,14 +18,14 @@ import java.util.ArrayList;
  */
 public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<PostInvoice> mData;
+    private ArrayList<incomeStruc> mData;
 
     /**
      * Constructor for recycleViewAdapter
      * @param context
      * @param data  the invoice array which want to view
      */
-    public recycleViewAdapter(Context context, ArrayList<PostInvoice> data) {
+    public recycleViewAdapter(Context context, ArrayList<incomeStruc> data) {
         this.mContext = context;
         this.mData = data;
     }
@@ -51,9 +52,9 @@ public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PostInvoice postinvoice = mData.get(position);
-        holder.tvPosterName.setText(postinvoice.posterName);
-        holder.tvContent.setText(postinvoice.content);
+        incomeStruc postinvoice = mData.get(position);
+        holder.tvPosterName.setText(postinvoice.getIncomeClass());
+        holder.tvContent.setText(postinvoice.getIncomeAmount());
 
         /*
         TODO:Used or NOT Used
