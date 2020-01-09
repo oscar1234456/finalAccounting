@@ -16,9 +16,12 @@ import java.util.ArrayList;
 /**
  * Class recycleViewAdapter: The Adapter for InvoiceList(type:recycleList)
  */
-public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.ViewHolder> {
+public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.ViewHolder>{
     private Context mContext;
     private ArrayList<incomeStruc> mData;
+
+    private OnItemClickListener mClickListener;
+
 
     /**
      * Constructor for recycleViewAdapter
@@ -39,10 +42,8 @@ public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_post,parent,false);
-        ViewHolder holder = new ViewHolder(view);
-        holder.tvContent = view.findViewById(R.id.tvContent);
-        holder.tvPosterName = view.findViewById(R.id.tvPosterName);
-        return holder;
+
+        return new ViewHolder(view,mClickListener);
     }
 
     /**
@@ -73,22 +74,43 @@ public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.
     }
 
 
+    public interface OnItemClickListener{
+        //引數（父元件，當前單擊的View,單擊的View的位置，資料）
+         void onItemClick(View view, int postion);
+    }
+
+
+
     /**
      * Class ViewHolder
      */
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tvPosterName;
         public TextView tvContent;
-
+        private OnItemClickListener mListener;// 宣告自定義監聽介面
         /**
          * Constructor for ViewHolder
          * @param itemView
          */
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
+            mListener = listener;
+
+            itemView.setOnClickListener(this);
+            tvContent = itemView.findViewById(R.id.tvContent);
+            tvPosterName = itemView.findViewById(R.id.tvPosterName);
         }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onItemClick(v, getLayoutPosition());
+        }
+
+
     }
 
-
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mClickListener = listener;
+    }
 
 }

@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -25,12 +27,15 @@ import com.example.accounting.LoginMenu;
 import com.example.accounting.MainActivity;
 import com.example.accounting.dataStructure.expensesStruc;
 import com.example.accounting.dataStructure.incomeStruc;
+import com.example.accounting.editIncome;
 import com.example.accounting.invoiceList.PostInvoice;
 import com.example.accounting.R;
 import com.example.accounting.invoiceList.recycleViewAdapter;
 import com.example.accounting.invoiceList.recycleViewExpenseAdapter;
+import com.example.accounting.newExpenses;
 import com.example.accounting.newIncome;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -137,7 +142,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("2ININ", document.getId() + " => " + document.getData());
                             incomeStruc tempIncome = new incomeStruc( document.getString("incomeAmount"),document.getString("incomeClass"),document.getString("incomeDate"),document.getString("incomeText"));
-
+                            tempIncome.setDocid(document.getId());//record the docid
                             data.add(tempIncome);
 
                         }
@@ -187,7 +192,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.d("2ININ", document.getId() + " => " + document.getData());
                         incomeStruc tempIncome = new incomeStruc( document.getString("incomeAmount"),document.getString("incomeClass"),document.getString("incomeDate"),document.getString("incomeText"));
-
+                        tempIncome.setDocid(document.getId());//record the docid
                         data.add(tempIncome);
 
                     }
@@ -224,19 +229,46 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                 int choose = spinnerDaySwitch.getSelectedItemPosition();
                 String colPath =  editDayDate.getText().toString();
                 if(choose==0){
+                    //income
                     Log.d("2ININ","0000");
                     addData(0,colPath);
-                    invoiceAdapter = new recycleViewAdapter(MainContext, data);
-                    recyclerView.setAdapter(invoiceAdapter);
                     View vs = view.findViewById(R.id.snack2);
+                    invoiceAdapter = new recycleViewAdapter(MainContext, data);
+                    invoiceAdapter.setOnItemClickListener(new recycleViewAdapter.OnItemClickListener() {
+                       @Override
+                       public void onItemClick(View view, int postion) {
+                           Log.d("2ININ","555  "+postion);
+                           incomeStruc selectedIncome = data.get(postion);
+                           Intent it = new Intent(getContext(), editIncome.class);
+                           it.putExtra("selectedIncome",selectedIncome);
+                           ((Activity)getContext()).startActivityForResult(it,200);
+
+                       }
+                   });;
+                    recyclerView.setAdapter(invoiceAdapter);
+
                     Snackbar.make(vs,"完成更新！",Snackbar.LENGTH_LONG).show();
                     break;
                 }else if(choose == 1){
                     Log.d("2ININ","1111");
                     addData(1,colPath);
-                    expenseAdapter = new recycleViewExpenseAdapter(MainContext, exDataList);
-                    recyclerView.setAdapter(expenseAdapter);
+
+
                     View vs = view.findViewById(R.id.snack2);
+                    expenseAdapter = new recycleViewExpenseAdapter(MainContext, exDataList);
+                    expenseAdapter.setOnItemClickListener(new recycleViewExpenseAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int postion) {
+                            Log.d("2ININ","666  "+exDataList.get(postion).getExpenseClass());
+
+
+                          /* Intent it = new Intent(getContext(), editIncome.class);
+
+                            ((Activity)getContext()).startActivityForResult(it,200);*/
+
+                        }
+                    });;
+                    recyclerView.setAdapter(expenseAdapter);
                     Snackbar.make(vs,"完成更新！",Snackbar.LENGTH_LONG).show();
                     expenseAdapter.notifyDataSetChanged();
                 }
@@ -245,8 +277,6 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                 ((Activity)getContext()).startActivityForResult(it,200);*/
                //invoiceAdapter.notifyDataSetChanged();
 
-
-
                 break;
         }
 
@@ -254,9 +284,110 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent it){
-            Log.d("2ININ",String.valueOf(requestCode));
-        String amount = it.getStringExtra("amount");
-        Log.d("2ININ",amount);
+           if(resultCode==600 && it != null){
+               String tempAmount = it.getStringExtra("amount");
+               String tempClass = it.getStringExtra("class");
+               String tempDate  =  it.getStringExtra("date");
+               String tempText  = it.getStringExtra("text");
+               String docid = it.getStringExtra("docid");
+               Boolean timeChange = it.getBooleanExtra("timeChange",false);
+               String colPath;
+
+
+               incomeStruc dataToSave = new incomeStruc(tempAmount,tempClass,tempDate,tempText);
+
+               if(timeChange == true){
+                   //直接刪除法 記得看舊日期
+                   colPath = it.getStringExtra("oldTime");
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   mColRef.document(docid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                       @Override
+                       public void onSuccess(Void aVoid) {
+
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+
+                       }
+                   });
+
+                   colPath = tempDate;
+                   editDayDate.setText(colPath);
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   mColRef.add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                       @Override
+                       public void onSuccess(DocumentReference documentReference) {
+                           View vs = view.findViewById(R.id.snack2);
+                           Snackbar.make(vs,"完成收入更新！",Snackbar.LENGTH_LONG).show();
+                           String colPath =  editDayDate.getText().toString();
+                           addData(0,colPath);
+
+                           invoiceAdapter = new recycleViewAdapter(MainContext, data);
+                           invoiceAdapter.setOnItemClickListener(new recycleViewAdapter.OnItemClickListener() {
+                               @Override
+                               public void onItemClick(View view, int postion) {
+                                   Log.d("2ININ","555  "+postion);
+                                   incomeStruc selectedIncome = data.get(postion);
+                                   Intent it = new Intent(getContext(), editIncome.class);
+                                   it.putExtra("selectedIncome",selectedIncome);
+                                   ((Activity)getContext()).startActivityForResult(it,200);
+
+                               }
+                           });
+                           recyclerView.setAdapter(invoiceAdapter);
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+
+                       }
+                   });
+
+               }else{
+                   //更新法
+                   colPath = tempDate;
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   mColRef.document(docid).update(
+                           "incomeAmount",tempAmount,
+                           "incomeClass",tempClass,
+                           "incomeDate",tempDate,
+                           "incomeText",tempText
+
+                   ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                       @Override
+                       public void onSuccess(Void aVoid) {
+                           View vs = view.findViewById(R.id.snack2);
+                           Snackbar.make(vs,"完成收入更新！",Snackbar.LENGTH_LONG).show();
+                           String colPath =  editDayDate.getText().toString();
+                           addData(0,colPath);
+
+                           invoiceAdapter = new recycleViewAdapter(MainContext, data);
+                           invoiceAdapter.setOnItemClickListener(new recycleViewAdapter.OnItemClickListener() {
+                               @Override
+                               public void onItemClick(View view, int postion) {
+                                   Log.d("2ININ","555  "+postion);
+                                   incomeStruc selectedIncome = data.get(postion);
+                                   Intent it = new Intent(getContext(), editIncome.class);
+                                   it.putExtra("selectedIncome",selectedIncome);
+                                   ((Activity)getContext()).startActivityForResult(it,200);
+
+                               }
+                           });
+                           recyclerView.setAdapter(invoiceAdapter);
+
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+
+                       }
+                   });
+               }
+
+
+
+           }
     }
 
 

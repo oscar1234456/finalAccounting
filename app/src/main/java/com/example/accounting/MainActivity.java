@@ -312,7 +312,6 @@ public void refre(){
                     c.onActivityResult(requestCode, resultCode, data);
                 }*/
 
-                myInvoiceView.onActivityResult(requestCode,  resultCode, it);
 
                 //當新增支出頁面回來時
                 View view = this.findViewById(R.id.snack);
@@ -337,6 +336,10 @@ public void refre(){
                         Log.d("EEEE","low");
                     }
                 });
+
+            }else if(resultCode == 600 && it != null){
+                //從編輯收入頁面回來
+                myInvoiceView.onActivityResult(requestCode,  resultCode, it);//呼叫view的onActivityResult
 
             }
         }

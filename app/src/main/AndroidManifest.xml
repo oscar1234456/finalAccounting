@@ -15,13 +15,15 @@
         android:roundIcon="@drawable/cloud_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".editExpenses"></activity>
+        <activity
+            android:name=".editIncome"
+            android:label="@string/title_activity_edit_income"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
             android:name=".newExpenses"
             android:label="@string/title_activity_new_expenses"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
             android:name=".newIncome"
             android:label="@string/title_activity_scrolling"

@@ -11,7 +11,8 @@
         android:id="@+id/invoiceList"
         android:layout_width="match_parent"
         android:layout_height="613dp"
-        android:layout_marginTop="150dp" />
+        android:layout_marginTop="150dp"
+        android:onClick="btnRe" />
 
     <EditText
         android:id="@+id/editDayDate"
