@@ -13,11 +13,15 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 
 import com.example.accounting.dataStructure.incomeStruc;
+import com.example.accounting.invoiceList.recycleViewAdapter;
 import com.example.accounting.listener.tabClickListener;
 import com.example.accounting.mainView.PageView;
 import com.example.accounting.mainView.myCostView;
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton mfab1,mfab2;
 
 public void refre(){
-    onStart();
+
 }
 
     /**
@@ -150,6 +154,7 @@ public void refre(){
         pagerAdapter = new SamplePagerAdapter();
         // Set adapter to mViewPager
         mViewPager.setAdapter(pagerAdapter);
+
         initListener();
     }
 
@@ -211,6 +216,8 @@ public void refre(){
 
     private class SamplePagerAdapter extends PagerAdapter {
 
+
+
         //get numbers of pageList elements(:view)
         @Override
         public int getCount() {
@@ -226,7 +233,9 @@ public void refre(){
         //instantiating the view be the viewpager's items
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+
             container.addView(pageList.get(position));
+
             //System.out.println("IN");  :for test use
             return pageList.get(position);
         }
@@ -235,8 +244,11 @@ public void refre(){
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
-            //System.out.println("OUT");  :for test use
+
+            System.out.println("OUT");
         }
+
+
     }
 
     @Override
@@ -263,6 +275,11 @@ public void refre(){
                init(user.email);
                 Snackbar.make(view,user.showName()+" "+user.showemail()+" "+user.showPhoto(),Snackbar.LENGTH_LONG).show();
             }else if(resultCode == 400 && it != null){
+                /*for (ViewPager c : pageList){
+                    c.onActivityResult(requestCode, resultCode, data);
+                }*/
+
+                myInvoiceView.onActivityResult(requestCode,  resultCode, it);
 
                 //當新增收入頁面回來時
                 View view = this.findViewById(R.id.snack);
@@ -278,18 +295,21 @@ public void refre(){
                 mColRef.document("Income").collection(dataToSave.getIncomeDate()).add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-
+                            Log.d("HHHH","now");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                            Log.d("HHHH","low");
                     }
                 });
 
             }
         }
     }
+
+
+
 
 
 

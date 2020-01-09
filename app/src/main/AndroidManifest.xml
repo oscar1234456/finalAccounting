@@ -15,12 +15,11 @@
         android:roundIcon="@drawable/cloud_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".newOutcome"></activity>
         <activity
             android:name=".newIncome"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -42,7 +41,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginMenu"></activity> <!-- android:theme="@style/AppTheme" -->
+        <activity android:name=".LoginMenu" /> <!-- android:theme="@style/AppTheme" -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

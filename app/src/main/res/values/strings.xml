@@ -20,7 +20,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="amount">Amount</string>
-    <string name ="income_class">Class</string>
+    <string name="income_class">Class</string>
     <string name="income_write">Text</string>
     <string name="income_date">Date</string>
 </resources>
