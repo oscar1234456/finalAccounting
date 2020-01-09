@@ -20,6 +20,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 
+import com.example.accounting.dataStructure.expensesStruc;
 import com.example.accounting.dataStructure.incomeStruc;
 import com.example.accounting.invoiceList.recycleViewAdapter;
 import com.example.accounting.listener.tabClickListener;
@@ -199,12 +200,14 @@ public void refre(){
         switch(v.getId()){
             case R.id.expenses:
                 Snackbar.make(view,"Expense！",Snackbar.LENGTH_LONG).show();
+                Intent ittoEx = new Intent(this,newExpenses.class);
+                startActivityForResult(ittoEx,400);
 
                 break;
             case R.id.income:
                 Snackbar.make(view,"Income!",Snackbar.LENGTH_LONG).show();
-                Intent it = new Intent(this,newIncome.class);
-                startActivityForResult(it,300);
+                Intent ittoIn = new Intent(this,newIncome.class);
+                startActivityForResult(ittoIn,300);
                 break;
 
 
@@ -295,12 +298,43 @@ public void refre(){
                 mColRef.document("Income").collection(dataToSave.getIncomeDate()).add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                            Log.d("HHHH","now");
+                            Log.d("IIII","now");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                            Log.d("HHHH","low");
+                            Log.d("IIII","low");
+                    }
+                });
+
+            }else if(resultCode == 500 && it != null){
+                /*for (ViewPager c : pageList){
+                    c.onActivityResult(requestCode, resultCode, data);
+                }*/
+
+                myInvoiceView.onActivityResult(requestCode,  resultCode, it);
+
+                //當新增支出頁面回來時
+                View view = this.findViewById(R.id.snack);
+                String amount = it.getStringExtra("amount");
+                String stringclass = it.getStringExtra("class");
+                String store = it.getStringExtra("store");
+                String sdate = it.getStringExtra("date");
+                String text  = it.getStringExtra("text");
+
+                Snackbar.make(view,amount+" "+stringclass+" "+store+" "+sdate+" "+text,Snackbar.LENGTH_LONG).show();
+                expensesStruc dataToSave = new expensesStruc(amount,stringclass,store,sdate,text);
+
+                //製造路線
+                mColRef.document("Expenses").collection(dataToSave.getExpenseDate()).add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("EEEE","now");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("EEEE","low");
                     }
                 });
 
@@ -318,6 +352,11 @@ public void refre(){
      * 每日畫面相關方法
      *
      * */
+
+    public void btnRe(View v){
+        View view = this.findViewById(R.id.snack);
+        Snackbar.make(view,"123",Snackbar.LENGTH_LONG).show();
+    }
 
 
 

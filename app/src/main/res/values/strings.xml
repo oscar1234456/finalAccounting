@@ -23,4 +23,9 @@
     <string name="income_class">Class</string>
     <string name="income_write">Text</string>
     <string name="income_date">Date</string>
+    <string name="title_activity_new_expenses">Expenses</string>
+
+
+    <string name="expenses_store">store</string>
+
 </resources>

@@ -2,6 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/snack2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/invoiceList"
         android:layout_width="match_parent"
@@ -17,6 +22,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="date" />
 
     <Spinner
@@ -26,7 +32,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="209dp"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="35dp"
+        android:gravity="center|center_horizontal|center_vertical" />
 
     <Button
         android:id="@+id/btntt"
@@ -37,4 +44,15 @@
         android:layout_marginStart="304dp"
         android:layout_marginTop="96dp"
         android:text="REFRESH" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="93dp"
+        android:onClick="btnRe"
+        android:text="Button" />
 </RelativeLayout>
