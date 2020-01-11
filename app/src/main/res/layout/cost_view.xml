@@ -5,8 +5,85 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/act_pie_pieChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="693dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="150dp">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
+    <EditText
+        android:id="@+id/editChartDateStart"
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="30dp"
+        android:editable="false"
+        android:ems="10"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/editChartDateEnd"
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="216dp"
+        android:layout_marginTop="30dp"
+        android:editable="false"
+        android:ems="10"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnChartRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="311dp"
+        android:layout_marginTop="94dp"
+        android:text="@string/fetch" />
+
+    <Spinner
+        android:id="@+id/spinnerChartSwitch"
+        style="@style/Platform.Widget.AppCompat.Spinner"
+        android:layout_width="184dp"
+        android:layout_height="44dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="95dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:popupBackground="#B9C2E2" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="187dp"
+        android:layout_marginTop="47dp"
+        android:text="~" />
+
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="116dp"
+        android:text="@string/refresh" />
+
+    <View
+        android:id="@+id/snack3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.accounting.invoiceList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.
 
             itemView.setOnClickListener(this);
             tvContent = itemView.findViewById(R.id.tvContent);
+            tvContent.setTextColor(Color.GREEN);
             tvPosterName = itemView.findViewById(R.id.tvPosterName);
         }
 

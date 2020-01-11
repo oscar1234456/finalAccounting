@@ -8,4 +8,30 @@
     <string name="setting_tabItem">個人</string>
     <string name="notice">請先登入！</string>
     <string name="facebook_app_id">1194618894068662</string> <string name="fb_login_protocol_scheme">fb1194618894068662</string>
+
+
+    <string name="title_activity_scrolling">收入</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="amount">金額</string>
+    <string name="income_class">種類</string>
+    <string name="income_write">描述</string>
+    <string name="income_date">日期</string>
+    <string name="title_activity_new_expenses">支出</string>
+
+
+    <string name="expenses_store">商店</string>
+    <string name="title_activity_edit_income">編輯收入</string>
+
+    <string name="title_activity_edit_expenses">編輯支出</string>
+    <string name="information">個人資訊</string>
+
+    <string name="refresh">重整</string>
+
+    <string name="fetch">獲取</string>
+
+    <string name="engExpense">支出</string>
+    <string name="engincome">收入</string>
+    <string name="engDate">日期:</string>
+    <string name="endSelect">收入/支出:</string>
 </resources>

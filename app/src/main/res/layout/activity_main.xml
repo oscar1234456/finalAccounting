@@ -74,7 +74,7 @@
             app:fab_colorNormal="#F44336"
             app:fab_colorPressed="@color/white_pressed"
             app:fab_size="mini"
-            app:fab_title="支出" />
+            app:fab_title="@string/engExpense" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/income"
@@ -83,7 +83,7 @@
             app:fab_colorNormal="#4CAF50"
             app:fab_colorPressed="@color/white_pressed"
             app:fab_size="mini"
-            app:fab_title="收入" />
+            app:fab_title="@string/engincome" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

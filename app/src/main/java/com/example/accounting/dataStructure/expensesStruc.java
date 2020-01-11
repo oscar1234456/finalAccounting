@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class expensesStruc implements Serializable {
     public String expenseAmount;
     public String expenseClass;
-    public String expenseStore;
     public String expenseDate;
+    public String expenseStore;
     public String expenseText;
     private String docid;
 
@@ -19,8 +19,8 @@ public class expensesStruc implements Serializable {
     public expensesStruc(String tempAmount, String tempClass, String tempStore, String tempDate, String tempText) {
         expenseAmount = tempAmount;
         expenseClass = tempClass;
-        expenseStore = tempStore;
         expenseDate = tempDate;
+        expenseStore = tempStore;
         expenseText = tempText;
 
     }
@@ -39,6 +39,10 @@ public class expensesStruc implements Serializable {
 
     public String getExpenseText() {
         return expenseText;
+    }
+
+    public String getExpenseStore() {
+        return expenseStore;
     }
 
     public Timestamp getExpenseTimestamp() {

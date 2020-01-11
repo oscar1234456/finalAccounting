@@ -25,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accounting.LoginMenu;
 import com.example.accounting.MainActivity;
+import com.example.accounting.Member;
 import com.example.accounting.dataStructure.expensesStruc;
 import com.example.accounting.dataStructure.incomeStruc;
+import com.example.accounting.editExpenses;
 import com.example.accounting.editIncome;
 import com.example.accounting.invoiceList.PostInvoice;
 import com.example.accounting.R;
@@ -59,6 +61,7 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 
 public class myInvoiceView extends PageView implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
+    private Member user;
     private RecyclerView recyclerView;
     private ArrayList<incomeStruc> data;
     private ArrayList<expensesStruc> exDataList;
@@ -79,9 +82,9 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
      *
      * @param context the root activity
      */
-    public myInvoiceView(Context context) {
+    public myInvoiceView(Context context, Member tempUser) {
         super(context);
-
+        user = tempUser;
         //Create the new view object, and Inflate by the Inflater from context which you send
         //the root will be set to itself.
         view = LayoutInflater.from(context).inflate(R.layout.myinvoice_view, null);
@@ -94,7 +97,10 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
         mcal = Calendar.getInstance();
         editDayDate.setText( mcal.get(Calendar.YEAR)+"/"+(mcal.get(Calendar.MONTH)+1)+"/"+mcal.get(Calendar.DATE));
 
-        choose = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,new String[]{"收入","支出"});
+        String engincome = getResources().getString(R.string.engincome);
+        String endexpense= getResources().getString(R.string.engExpense);
+
+        choose = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,new String[]{engincome,endexpense});
         spinnerDaySwitch.setAdapter(choose);
         //test used
         data = new ArrayList<>();
@@ -134,7 +140,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
             //get income data
             Log.d("2ININ","get income");
             data.clear();
-            mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+            mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Income").collection(colPath);
             mColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -156,15 +162,15 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
             // get expensive
             Log.d("2ININ","get expen");
             exDataList.clear();
-            mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Expenses").collection(colPath);
+            mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Expenses").collection(colPath);
             mColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("2ININ", document.getId() + " => " + document.getData());
-                            expensesStruc tempExpenses = new expensesStruc( document.getString("expenseAmount"),document.getString("expenseClass"),document.getString("expenseDate"),document.getString("expenseStore"),document.getString("expenseText"));
-
+                            expensesStruc tempExpenses = new expensesStruc( document.getString("expenseAmount"),document.getString("expenseClass"),document.getString("expenseStore"),document.getString("expenseDate"),document.getString("expenseText"));
+                            tempExpenses.setDocid(document.getId());
                             exDataList.add(tempExpenses);
 
                         }
@@ -184,7 +190,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
         Log.d("2ININ","init");
         String colPath =  mcal.get(Calendar.YEAR)+"/"+(mcal.get(Calendar.MONTH)+1)+"/"+mcal.get(Calendar.DATE);
 
-        mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+        mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Income").collection(colPath);
         mColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -244,7 +250,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                            ((Activity)getContext()).startActivityForResult(it,200);
 
                        }
-                   });;
+                   });
                     recyclerView.setAdapter(invoiceAdapter);
 
                     Snackbar.make(vs,"完成更新！",Snackbar.LENGTH_LONG).show();
@@ -260,7 +266,10 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                         @Override
                         public void onItemClick(View view, int postion) {
                             Log.d("2ININ","666  "+exDataList.get(postion).getExpenseClass());
-
+                            expensesStruc selectedExpenses = exDataList.get(postion);
+                            Intent it = new Intent(getContext(), editExpenses.class);
+                            it.putExtra("selectedExpenses",selectedExpenses);
+                            ((Activity)getContext()).startActivityForResult(it,200);
 
                           /* Intent it = new Intent(getContext(), editIncome.class);
 
@@ -287,7 +296,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
            if(resultCode==600 && it != null){
                String tempAmount = it.getStringExtra("amount");
                String tempClass = it.getStringExtra("class");
-               String tempDate  =  it.getStringExtra("date");
+              String tempDate  =  it.getStringExtra("date");
                String tempText  = it.getStringExtra("text");
                String docid = it.getStringExtra("docid");
                Boolean timeChange = it.getBooleanExtra("timeChange",false);
@@ -299,7 +308,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                if(timeChange == true){
                    //直接刪除法 記得看舊日期
                    colPath = it.getStringExtra("oldTime");
-                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Income").collection(colPath);
                    mColRef.document(docid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                        @Override
                        public void onSuccess(Void aVoid) {
@@ -314,7 +323,7 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
 
                    colPath = tempDate;
                    editDayDate.setText(colPath);
-                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Income").collection(colPath);
                    mColRef.add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                        @Override
                        public void onSuccess(DocumentReference documentReference) {
@@ -347,7 +356,8 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                }else{
                    //更新法
                    colPath = tempDate;
-                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+"s110616038@stu.ntue.edu.tw"+"/IE").document("Income").collection(colPath);
+                   Log.d("INCOME",colPath+" "+docid);
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Income").collection(colPath);
                    mColRef.document(docid).update(
                            "incomeAmount",tempAmount,
                            "incomeClass",tempClass,
@@ -380,12 +390,116 @@ public class myInvoiceView extends PageView implements View.OnClickListener,Date
                    }).addOnFailureListener(new OnFailureListener() {
                        @Override
                        public void onFailure(@NonNull Exception e) {
-
+                            Log.d("INCOME","ERR");
                        }
                    });
                }
 
 
+
+           }else if(resultCode == 700 && it != null){
+               //從編輯收入頁面回來
+               String tempAmount = it.getStringExtra("amount");
+               String tempClass = it.getStringExtra("class");
+               String tempDate  =  it.getStringExtra("date");
+               String tempText  = it.getStringExtra("text");
+               String tempStore = it.getStringExtra("store");
+               String docid = it.getStringExtra("docid");
+               Boolean timeChange = it.getBooleanExtra("timeChange",false);
+               String colPath;
+                Log.d("STORE",it.getStringExtra("store"));
+
+               expensesStruc dataToSave = new expensesStruc(tempAmount,tempClass,tempStore,tempDate,tempText);
+
+               if(timeChange == true){
+                   //直接刪除法 記得看舊日期
+                   colPath = it.getStringExtra("oldTime");
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Expenses").collection(colPath);
+                   mColRef.document(docid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                       @Override
+                       public void onSuccess(Void aVoid) {
+
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+
+                       }
+                   });
+
+                   colPath = tempDate;
+                   editDayDate.setText(colPath);
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Expenses").collection(colPath);
+                   mColRef.add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                       @Override
+                       public void onSuccess(DocumentReference documentReference) {
+                           View vs = view.findViewById(R.id.snack2);
+                           Snackbar.make(vs,"完成支出更新！",Snackbar.LENGTH_LONG).show();
+                           String colPath =  editDayDate.getText().toString();
+                           addData(1,colPath);
+
+                           expenseAdapter = new recycleViewExpenseAdapter(MainContext, exDataList);
+                           expenseAdapter.setOnItemClickListener(new recycleViewExpenseAdapter.OnItemClickListener() {
+                               @Override
+                               public void onItemClick(View view, int postion) {
+                                   Log.d("2ININ","666  "+exDataList.get(postion).getExpenseClass());
+                                   expensesStruc selectedExpenses = exDataList.get(postion);
+                                   Intent it = new Intent(getContext(), editExpenses.class);
+                                   it.putExtra("selectedExpenses",selectedExpenses);
+                                   ((Activity)getContext()).startActivityForResult(it,200);
+
+                               }
+                           });
+                           recyclerView.setAdapter(expenseAdapter);
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+
+                       }
+                   });
+
+               }else{
+                   //更新法
+                   Log.d("UUUU","UPDATE "+docid+" "+tempDate);
+                   colPath = tempDate;
+                   mColRef = FirebaseFirestore.getInstance().collection("Users/"+user.showemail()+"/IE").document("Expenses").collection(colPath);
+                   mColRef.document(docid).update(
+                           "expenseAmount",tempAmount,
+                           "expenseClass",tempClass,
+                           "expenseDate",tempDate,
+                           "expenseStore",tempStore,
+                           "expenseText",tempText
+
+                   ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                       @Override
+                       public void onSuccess(Void aVoid) {
+                           View vs = view.findViewById(R.id.snack2);
+                           Snackbar.make(vs,"完成支出更新！",Snackbar.LENGTH_LONG).show();
+                           String colPath =  editDayDate.getText().toString();
+                           addData(1,colPath);
+
+                           expenseAdapter = new recycleViewExpenseAdapter(MainContext, exDataList);
+                           expenseAdapter.setOnItemClickListener(new recycleViewExpenseAdapter.OnItemClickListener() {
+                               @Override
+                               public void onItemClick(View view, int postion) {
+                                   Log.d("2ININ","666  "+exDataList.get(postion).getExpenseClass());
+                                   expensesStruc selectedExpenses = exDataList.get(postion);
+                                   Intent it = new Intent(getContext(), editExpenses.class);
+                                   it.putExtra("selectedExpenses",selectedExpenses);
+                                   ((Activity)getContext()).startActivityForResult(it,200);
+
+                               }
+                           });
+                           recyclerView.setAdapter(expenseAdapter);
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                            Log.d("UUUU","EOOEE");
+                       }
+                   });
+               }
 
            }
     }

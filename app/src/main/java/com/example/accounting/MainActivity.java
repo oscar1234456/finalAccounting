@@ -1,28 +1,20 @@
 package com.example.accounting;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 
 import com.example.accounting.dataStructure.expensesStruc;
 import com.example.accounting.dataStructure.incomeStruc;
-import com.example.accounting.invoiceList.recycleViewAdapter;
 import com.example.accounting.listener.tabClickListener;
 import com.example.accounting.mainView.PageView;
 import com.example.accounting.mainView.myCostView;
@@ -39,9 +31,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -61,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FloatingActionButton mfab1,mfab2;
 
-public void refre(){
-
-}
 
     /**
      * Needed for Android System
@@ -91,7 +77,7 @@ public void refre(){
             userData = new Member(userName,userEmail,userPhoto);
             Snackbar.make(view,"成功登入！"+userName+" "+userEmail+" "+userPhoto,Snackbar.LENGTH_LONG).show();
 
-            init(userEmail);
+            init(userEmail,userData);
         }
     }
 
@@ -116,9 +102,9 @@ public void refre(){
 
     }
 
-    protected void init(String mail) {
+    protected void init(String mail, Member tempUser) {
 
-        initView(); //Initialize View
+        initView(tempUser); //Initialize View
         initTab(); //Initialize TabLayout and viewPager
         mfab1 = this.findViewById(R.id.expenses);
         mfab2 = this.findViewById(R.id.income);
@@ -162,20 +148,20 @@ public void refre(){
     /**
      * The method used to initialize the view in pageList
      */
-    private void initView() {
+    private void initView(Member userData) {
         pageList = new ArrayList<>();
 
-        myCostView = new myCostView(MainActivity.this);
+        myCostView = new myCostView(MainActivity.this,userData);
         // Add the view items to pageList
         pageList.add(myCostView);
 
         // Use a attribute to save myInvoiceView
-        myInvoiceView = new myInvoiceView(MainActivity.this);
+        myInvoiceView = new myInvoiceView(MainActivity.this,userData);
         // Add the view items to pageList
         pageList.add(myInvoiceView);
 
 
-        mySettingView = new settingView(MainActivity.this);
+        mySettingView = new settingView(MainActivity.this,userData);
         // Add the view items to pageList
         pageList.add(mySettingView);
 
@@ -275,7 +261,7 @@ public void refre(){
 
                 //Snackbar.make(view,"成功！",Snackbar.LENGTH_LONG).show();
 
-               init(user.email);
+               init(user.email, user);
                 Snackbar.make(view,user.showName()+" "+user.showemail()+" "+user.showPhoto(),Snackbar.LENGTH_LONG).show();
             }else if(resultCode == 400 && it != null){
                 /*for (ViewPager c : pageList){
@@ -339,6 +325,10 @@ public void refre(){
 
             }else if(resultCode == 600 && it != null){
                 //從編輯收入頁面回來
+                myInvoiceView.onActivityResult(requestCode,  resultCode, it);//呼叫view的onActivityResult
+
+            }else if(resultCode == 700 && it != null){
+                //從編輯支出頁面回來
                 myInvoiceView.onActivityResult(requestCode,  resultCode, it);//呼叫view的onActivityResult
 
             }
